@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}File Management{% endblock %}
+{% block content %}
+<h2 class="mb-4 fw-bold">File Management</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="POST" enctype="multipart/form-data" class="row g-2 align-items-center">
+      <div class="col-auto flex-grow-1">
+        <input type="file" name="file" class="form-control" required>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </div>
+    </form>
+    <small class="text-muted">Allowed: txt, pdf, png, jpg, jpeg, gif, csv, xlsx, docx, zip (max 16MB)</small>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Size</th>
+          <th>Uploaded</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in files %}
+        <tr>
+          <td>{{ f['filename'] }}</td>
+          <td>{{ (f['filesize'] / 1024) | round(1) }} KB</td>
+          <td>{{ f['uploaded_at'][:19].replace('T', ' ') }}</td>
+          <td class="text-end">
+            <a href="{{ url_for('download_file', file_id=f['id']) }}" class="btn btn-sm btn-outline-secondary">Download</a>
+            <form method="POST" action="{{ url_for('delete_file', file_id=f['id']) }}" class="d-inline" onsubmit="return confirm('Delete this file?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted py-4">No files uploaded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

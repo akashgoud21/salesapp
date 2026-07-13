@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4 fw-bold">Dashboard</h2>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Total Files</div>
+        <div class="stat-number">{{ file_count }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Total Revenue Analyzed</div>
+        <div class="stat-number">${{ "%.2f"|format(total_revenue) }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Sales Reports Uploaded</div>
+        <div class="stat-number">{{ sales_uploads|length }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header fw-semibold">Recent Files</div>
+      <ul class="list-group list-group-flush">
+        {% for f in recent_files %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ f['filename'] }}</span>
+            <span class="text-muted small">{{ f['uploaded_at'][:10] }}</span>
+          </li>
+        {% else %}
+          <li class="list-group-item text-muted">No files uploaded yet.</li>
+        {% endfor %}
+      </ul>
+      <div class="card-footer">
+        <a href="{{ url_for('files') }}" class="btn btn-sm btn-outline-primary">Manage Files</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header fw-semibold">Recent Sales Reports</div>
+      <ul class="list-group list-group-flush">
+        {% for s in sales_uploads %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ s['filename'] }}</span>
+            <span class="text-muted small">${{ "%.2f"|format(s['total_revenue'] or 0) }}</span>
+          </li>
+        {% else %}
+          <li class="list-group-item text-muted">No sales reports yet.</li>
+        {% endfor %}
+      </ul>
+      <div class="card-footer">
+        <a href="{{ url_for('sales') }}" class="btn btn-sm btn-outline-primary">Analyze Sales</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

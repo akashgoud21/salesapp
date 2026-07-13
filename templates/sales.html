@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Sales Analysis{% endblock %}
+{% block content %}
+<h2 class="mb-4 fw-bold">Sales Analysis</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="POST" enctype="multipart/form-data" class="row g-2 align-items-center">
+      <div class="col-auto flex-grow-1">
+        <input type="file" name="sales_file" class="form-control" accept=".csv,.xlsx" required>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Analyze</button>
+      </div>
+    </form>
+    <small class="text-muted">Upload a CSV/XLSX with a revenue column (amount/revenue/sales/total/price), optionally with a product or date column.</small>
+  </div>
+</div>
+
+{% if summary %}
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Total Revenue</div>
+        <div class="stat-number">${{ summary.total_revenue }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Total Orders</div>
+        <div class="stat-number">{{ summary.total_orders }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card stat-card">
+      <div class="card-body">
+        <div class="text-muted">Average Order Value</div>
+        <div class="stat-number">${{ summary.average_order }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <canvas id="salesChart" height="100"></canvas>
+  </div>
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-header fw-semibold">Upload History</div>
+  <ul class="list-group list-group-flush">
+    {% for h in history %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ h['filename'] }}</span>
+        <span class="text-muted small">${{ "%.2f"|format(h['total_revenue'] or 0) }} · {{ h['total_orders'] }} orders</span>
+      </li>
+    {% else %}
+      <li class="list-group-item text-muted">No sales reports uploaded yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% if chart_data %}
+<script>
+  const chartData = {{ chart_data | safe }};
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartData.labels,
+      datasets: [{
+        label: chartData.label,
+        data: chartData.values,
+        backgroundColor: 'rgba(79, 70, 229, 0.7)',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+</script>
+{% endif %}
+{% endblock %}

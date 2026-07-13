@@ -1,0 +1,46 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f6fb;
+}
+
+.app-navbar {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+}
+
+.auth-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.stat-card .stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.weather-card {
+  background: linear-gradient(135deg, #4f46e5, #818cf8);
+  color: white;
+}
+
+.weather-card .text-muted {
+  color: rgba(255,255,255,0.75) !important;
+}
+
+.navbar-nav .nav-link.active {
+  font-weight: 600;
+  color: #fff !important;
+  border-bottom: 2px solid #fff;
+}
+
+.table th {
+  font-weight: 600;
+  color: #555;
+}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Weather{% endblock %}
+{% block content %}
+<h2 class="mb-4 fw-bold">Weather Lookup</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="POST" class="row g-2">
+      <div class="col-auto flex-grow-1">
+        <input type="text" name="city" class="form-control" placeholder="Enter city name (e.g. Hyderabad)" value="{{ city }}" required>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Get Weather</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if weather_data %}
+<div class="card weather-card">
+  <div class="card-body">
+    <h4>{{ weather_data.city }}{% if weather_data.country %}, {{ weather_data.country }}{% endif %}</h4>
+    <div class="row mt-3">
+      <div class="col-md-3">
+        <div class="text-muted small">Temperature</div>
+        <div class="fs-3 fw-bold">{{ weather_data.current.temperature_2m }}°C</div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-muted small">Humidity</div>
+        <div class="fs-3 fw-bold">{{ weather_data.current.relative_humidity_2m }}%</div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-muted small">Wind Speed</div>
+        <div class="fs-3 fw-bold">{{ weather_data.current.wind_speed_10m }} km/h</div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-muted small">Today's Range</div>
+        <div class="fs-5 fw-bold">
+          {{ weather_data.daily.temperature_2m_min[0] }}° / {{ weather_data.daily.temperature_2m_max[0] }}°
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
